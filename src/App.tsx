@@ -5,8 +5,9 @@ import TodoHeader from "./components/todoHeader/TodoHeader";
 import TodoItem from "./components/todoItem/TodoItem";
 import {Todo} from "./dto";
 
+const todos = JSON.parse(localStorage.getItem("todos") as string)
+
 const App = () => {
-    const todos = JSON.parse(localStorage.getItem("todos") as string)
     const [arr, setArr] = useState<Todo[]>(todos ? todos : [])
     const [status, setStatus] = useState('any')
     useEffect(() => {
@@ -14,14 +15,13 @@ const App = () => {
     }, [arr])
     const onCheck = (id: number) => setArr(arr.map((todo: Todo) => {
         if (todo.id === id) {
-            todo.isComplete = !todo.isComplete;
+            return { ...todo, isComplete: !todo.isComplete }
         }
         return todo;
     }))
     const onDelete = (id: number) => {
-        setArr([...arr.filter((item: Todo) => item.id !== id)]);
+        setArr(arr.filter((item: Todo) => item.id !== id))
     }
-
     const onCreate = (val: string) => {
         setArr([...arr, {id: Math.random(), isComplete: false, title: val}])
     }
